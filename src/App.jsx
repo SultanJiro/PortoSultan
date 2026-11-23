@@ -1,238 +1,177 @@
+import Projects from "./components/Projects";
+import HoloCard from "./components/HoloCard";
+import ElectricBorder from "./components/ElectricBorder";
+import { useEffect, useRef } from "react";
+
+const kalbeProjects = [
+  {
+    title: "Cash Advance",
+    contributions: [
+      "Helped migrate Cash Advance to the central application portal so employees could sign in there and continue working on their cash advance requests.",
+      "Supported the JumpCloud single sign-on integration, including the handoff from the portal back to Cash Advance and the use of Redis to manage application sessions.",
+      "Helped connect portal accounts to existing employee records and Cash Advance roles so users could access the right documents and approval actions after signing in.",
+      "Worked on the React interface and Node.js APIs that employees use to review request details, find documents awaiting approval, and track a request through its approval steps.",
+      "Helped troubleshoot access issues by tracing requests from the browser through Express routes to employee and role records in SQL Server.",
+      "Project stack included React, Chakra UI, and Redux Toolkit on the frontend, Node.js and Express on the backend, Prisma with SQL Server for application data, and Redis for sessions.",
+    ],
+  },
+  {
+    title: "Monthly Expense Planning",
+    contributions: [
+      "Helped migrate Monthly Expense Planning (MEP) to the central application portal so employees could use a single sign-on to access their planning documents.",
+      "Worked on session renewal between MEP and the portal so employees could continue working while their portal session was valid and sign in again when it expired.",
+      "Updated the configuration form to show suppliers and accounts payable types for the selected country when administrators set expense planning limits.",
+      "Updated the document dashboard so administrators could review plans across users and see the roles used to create and update each document.",
+      "Preserved the original creator's employee ID when another user edited a plan, so reviewers could distinguish the person who created it from the person who last updated it.",
+      "The frontend used React, Chakra UI, and Redux Toolkit. The backend used Node.js and Express, with Prisma for SQL Server access and Redis for session storage.",
+    ],
+  },
+  {
+    title: "KIAT (Kalbe International Approval Tree)",
+    contributions: [
+      "Helped build the Cash Advance approval path form in KIAT so users could select a creator, choose a requestor, and define the order of approvers.",
+      "Fixed the creator search in the approval path list and updated role selection so users could choose roles by name while the backend validated their IDs.",
+    ],
+  },
+  {
+    title: "Across projects",
+    subheading: "Application maintenance, repository migration and security",
+    contributions: [
+      "Built and maintained internal application features with React.js, Express.js and SQL databases. Updated interfaces to follow enterprise UI standards.",
+      "Helped migrate nine application repositories from GitHub to GitLab and configure them in their new location.",
+      "Scanned code with I3GIS and worked with the security team to address vulnerabilities.",
+      "Troubleshot application issues and tested fixes with other developers.",
+    ],
+  },
+];
+
 function App() {
+  const toolList = useRef(null);
+
+  useEffect(() => {
+    if (!window.IntersectionObserver) return;
+
+    const list = toolList.current;
+    list.classList.add("tool-motion-ready");
+    const observer = new IntersectionObserver((entries) => {
+      let order = 0;
+      for (const { target, isIntersecting, intersectionRatio } of entries) {
+        if (!isIntersecting) {
+          target.classList.remove("tool-revealed");
+        } else if (intersectionRatio >= 0.3 && !target.classList.contains("tool-revealed")) {
+          target.style.setProperty("--tool-delay", `${order * 85}ms`);
+          target.classList.add("tool-revealed");
+          order++;
+        }
+      }
+    }, { threshold: [0, 0.3] });
+
+    for (const item of list.children) observer.observe(item);
+    return () => {
+      observer.disconnect();
+      list.classList.remove("tool-motion-ready");
+    };
+  }, []);
+
   return (
-    <div className="min-h-screen w-full bg-[#121212] text-white font-sans overflow-x-hidden">
-      <main className="w-full px-6 md:px-12 lg:px-20">
-        {/* SECTION HERO */}
-        <section className="min-h-screen flex items-center pt-32 pb-12 md:pt-36">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
-            {/* KOLOM KIRI: TEKS & CTA */}
-            <div className="lg:col-span-7">
-              {/* Status Badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-medium mb-8">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                </span>
-                Available for Full time or Internship Opportunities
-              </div>
-
-              {/* Headline */}
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black mb-8 tracking-tighter leading-[0.9]">
-                HI, <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-cyan-400">
-                  I&apos;M SULTAN
-                </span>{" "}
-                <br />
-                MAULANA F.A.
-              </h1>
-
-              {/* Sub-headline */}
-              <p className="text-base sm:text-lg md:text-xl text-gray-400 mb-10 max-w-xl leading-relaxed">
-                I am a recent graduate of Gunadarma University, currently
-                seeking opportunities to grow as an IT Developer. I am also
-                interested in functional IT roles, such as System Analyst and
-                Business Analyst.
-              </p>
-
-              {/* CTA Buttons */}
-              <div className="flex flex-wrap gap-5">
-                <a
-                  href="#proyek"
-                  className="group relative px-8 py-4 bg-white text-black rounded-full font-bold transition-all hover:pr-12"
-                >
-                  View Projects
-                  <span className="absolute right-4 opacity-0 group-hover:opacity-100 transition-all">
-                    →
-                  </span>
-                </a>
-                <a
-                  href="#kontak"
-                  className="px-8 py-4 bg-transparent border border-gray-700 hover:border-gray-400 text-white rounded-full font-bold transition-all"
-                >
-                  Contact
-                </a>
-              </div>
-            </div>
-
-            {/* HERO PORTRAIT */}
-            <div className="lg:col-span-5 flex justify-center lg:justify-end items-center py-8">
-              <div className="relative isolate w-full max-w-[400px] group">
-                <div
-                  aria-hidden="true"
-                  className="absolute -inset-6 rounded-full bg-blue-500/20 blur-3xl transition-opacity duration-700 group-hover:opacity-80"
-                ></div>
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 rotate-6 rounded-[2.5rem] border border-cyan-400/20 bg-blue-500/5 transition-transform duration-500 motion-safe:group-hover:rotate-3"
-                ></div>
-
-                <div className="relative aspect-[4/5] overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#101a2a] shadow-[0_24px_80px_rgba(0,0,0,0.4)]">
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-0 bg-[radial-gradient(ellipse_at_65%_35%,rgba(59,130,246,0.3),transparent_65%)]"
-                  ></div>
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:32px_32px]"
-                  ></div>
-                  <div
-                    aria-hidden="true"
-                    className="absolute left-1/2 top-[18%] h-[65%] w-[80%] -translate-x-1/2 rounded-full border border-cyan-300/20 shadow-[0_0_50px_rgba(34,211,238,0.08)]"
-                  ></div>
-
-                  <img
-                    src="/assets/projects/foto-gw.jpeg"
-                    alt="Sultan Maulana F.A."
-                    className="absolute inset-0 h-full w-full object-cover [object-position:45%_20%] origin-[44%_55%] translate-x-[10%] scale-[1.65] mix-blend-lighten transition-transform duration-700 motion-safe:group-hover:scale-[1.7]"
-                  />
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-0 bg-gradient-to-t from-[#0b1220] via-transparent to-transparent"
-                  ></div>
-
-                  <div className="absolute left-6 top-6 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-cyan-200/80">
-                    <span className="h-1.5 w-1.5 rounded-full bg-cyan-300"></span>
-                    Developer / Portfolio
-                  </div>
-                  <div
-                    aria-hidden="true"
-                    className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 font-mono text-lg text-cyan-300 backdrop-blur-md"
-                  >
-                    &lt;/&gt;
-                  </div>
-
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <p className="mb-1 text-[10px] font-medium uppercase tracking-[0.25em] text-cyan-300">
-                      Building ideas into reality
-                    </p>
-                    <p className="text-2xl font-bold tracking-tight text-white">
-                      Sultan Maulana
-                    </p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {["Next.js", "React.js", "SQL"].map((skill) => (
-                        <span
-                          key={skill}
-                          className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-medium text-gray-300 backdrop-blur-md"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="absolute -bottom-4 right-3 sm:-right-4 flex items-center gap-3 rounded-2xl border border-white/10 bg-[#172131]/90 px-4 py-3 shadow-xl backdrop-blur-xl transition-transform duration-500 motion-safe:group-hover:-translate-y-1">
-                  <span
-                    aria-hidden="true"
-                    className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-500/15 font-mono text-sm font-bold text-blue-400"
-                  >
-                    &#123; &#125;
-                  </span>
-                  <div>
-                    <p className="text-xs font-semibold text-white">
-                      IT Developer Intern
-                    </p>
-                    <p className="mt-0.5 text-[10px] text-gray-400">
-                      Kalbe International
-                    </p>
-                  </div>
-                </div>
-              </div>
+    <div className="portfolio-page min-h-screen w-full text-white font-sans overflow-x-hidden">
+      <div className="portfolio-backdrop" aria-hidden="true">
+        <img src="/assets/miami-dusk.webp" alt="" width="1672" height="941" />
+      </div>
+      <main className="portfolio-content">
+        <section id="home" className="intro" aria-labelledby="intro-name">
+          <div>
+            <h1 id="intro-name">Sultan<br /><span>Maulana F.A.</span></h1>
+            <p className="intro-bio">
+              I am a recent graduate of Gunadarma University, currently seeking
+              opportunities to grow as an IT Developer. I am also interested in
+              functional IT roles, such as System Analyst and Business Analyst.
+            </p>
+            <p className="availability">Available for full-time roles or internships</p>
+            <div className="intro-actions">
+              <a className="bevel-button" href="#proyek">View projects</a>
+              <a className="text-link" href="#kontak">Contact</a>
             </div>
           </div>
+          <HoloCard className="hero-holo" preset="bursts" intensity={0.48}
+            glare={0.2} frame={2} radius={6} tiltMax={11} hoverScale={1.025} shadow={false}>
+            <figure className="portrait">
+              <img className="portrait-photo" src="/assets/projects/sultan-miami-poster.webp"
+                alt="Illustrated portrait of Sultan Maulana at sunset in Miami" width="1122" height="1402" />
+              <figcaption>
+                <strong>IT Developer</strong>
+                <span>Open to developer and analyst roles</span>
+              </figcaption>
+            </figure>
+          </HoloCard>
         </section>
         {/* HERO END */}
 
-        {/* WORK EXPERIENCE */}
-        <section id="tentang" className="py-16">
-          <div className="bg-[#222] rounded-2xl p-6 md:p-8 shadow-2xl border border-white/5 relative overflow-hidden group">
-            {/* Efek Gradasi Halus di Background */}
-            <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/10 blur-[100px] rounded-full group-hover:bg-blue-500/20 transition-all duration-700"></div>
-
-            <div className="relative z-10">
-              <h2 className="text-3xl md:text-4xl font-black mb-6">
-                Work Experience
-              </h2>
-              <h3 className="text-lg md:text-xl font-bold text-white mb-2">
-                IT Developer Intern — Kalbe International
-              </h3>
-              <p className="text-sm text-blue-400 italic mb-4">
-                August 2026 – Present
-              </p>
-              <ul className="list-disc pl-5 space-y-2 text-sm md:text-base text-gray-300 leading-relaxed mb-8 marker:text-blue-400">
-                <li>
-                  Assisted in the development, maintenance, and enhancement of
-                  satellite applications to support enterprise business
-                  operations and system functionality.
-                </li>
-                <li>
-                  Supported the integration of the Cash Advance application into
-                  the Work Hub enterprise portal, including backend API
-                  integration, database operations, and application
-                  functionality improvements.
-                </li>
-                <li>
-                  Developed and maintained web application features using
-                  Next.js, Node.js, Express.js, and SQL-based databases.
-                </li>
-                <li>
-                  Enhanced front-end interfaces to align with enterprise UI
-                  standards, improving application consistency and usability.
-                </li>
-                <li>
-                  Assisted in migrating 9 application source-code repositories
-                  from GitHub to GitLab, ensuring proper repository
-                  configuration and code management.
-                </li>
-                <li>
-                  Conducted security code scanning using I3GIS and collaborated
-                  with the security team to identify and remediate code
-                  vulnerabilities.
-                </li>
-                <li>
-                  Troubleshot application issues, performed functional testing,
-                  and collaborated with developers to support application
-                  stability and continuous improvement.
-                </li>
-              </ul>
-
-              {/* Baris Bawah: Foto & Stats */}
-              <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                {/* Foto Profil Mini */}
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl overflow-hidden border-2 border-blue-500/30 shadow-lg shadow-blue-500/10">
-                    <img
-                      src="/assets/pas 4x6.png"
-                      alt="Profile"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-white">
-                      Sultan Maulana F.A.
-                    </h4>
-                    <p className="text-sm text-gray-500">Based in Indonesia</p>
-                  </div>
-                </div>
+        <section
+          id="tentang"
+          className="py-16"
+          aria-labelledby="experience-title"
+        >
+          <ElectricBorder
+            className="console-panel"
+            color="#ff549e"
+            glowColor="#ee2984"
+            speed={0.55}
+            chaos={0.28}
+            spread={0.26}
+            strands={2}
+            thickness={1.25}
+            glow={0.4}
+            intensity={0.75}
+            arcs={0.12}
+            flicker={0}
+            borderRadius={12}
+          >
+            <h2 id="experience-title" className="console-title">
+              Work Experience
+            </h2>
+            <details className="experience-company">
+              <summary className="experience-row company-row">
+                <span>
+                  <strong className="block text-xl">Kalbe International</strong>
+                  <span className="mt-1 block text-sm text-gray-300">
+                    IT Developer Intern · August 2026 – Present
+                  </span>
+                </span>
+                <span className="company-action" aria-hidden="true">
+                  <span className="when-closed">View projects</span>
+                  <span className="when-open">Hide projects</span>
+                  <span className="action-chevron" />
+                </span>
+              </summary>
+              <div className="mt-3 grid gap-2 sm:ml-5">
+                {kalbeProjects.map(({ title, subheading = "Internal application", contributions }) => (
+                  <details key={title} className="experience-project">
+                    <summary className="experience-row project-row">
+                      <span>
+                        <strong className="block">{title}</strong>
+                        <span className="mt-1 block text-sm text-gray-400">
+                          {subheading}
+                        </span>
+                      </span>
+                      <span className="project-toggle" aria-hidden="true" />
+                    </summary>
+                    <ul className="mx-4 max-w-3xl list-disc space-y-2 border-t border-white/10 py-4 pl-5 text-sm leading-relaxed text-gray-300">
+                      {contributions.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </details>
+                ))}
               </div>
-            </div>
-          </div>
+            </details>
+          </ElectricBorder>
         </section>
-        {/* WORK EXPERIENCE END */}
 
         {/* TOOLS */}
-        <section id="tools" className="py-24">
-          <div className="mb-12">
-            <h2 className="text-4xl md:text-5xl font-black mb-4">
-              Tools I Use
-            </h2>
-            <p className="text-gray-400 max-w-xl">
-              Here are some of the tools I use for web development and design.
-            </p>
-          </div>
-
-          {/* Grid System */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <section id="tools" aria-labelledby="tools-title" className="my-16 scroll-mt-24">
+          <h2 id="tools-title" className="tool-title">Tools I Use</h2>
+          <ul ref={toolList} className="tool-directory">
             {[
               {
                 name: "Visual Studio Code",
@@ -257,224 +196,53 @@ function App() {
               { name: "Canva", desc: "Design App", img: "canva.png" },
               { name: "Figma", desc: "Design App", img: "figma.png" },
             ].map((tool, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-4 p-4 bg-[#222]/50 border border-white/5 rounded-xl hover:border-blue-500/50 hover:bg-[#222] transition-all group"
+              <li
+                key={tool.name}
+                className="tool-entry"
+                style={{
+                  "--float-period": `${3.4 + (index % 4) * 0.4}s`,
+                  "--float-phase": `${-index * 0.67}s`,
+                }}
               >
-                {/* Container Logo */}
-                <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-[#1a1a1a] rounded-lg p-2 group-hover:scale-110 transition-transform">
+                <div className="tool-icon">
                   <img
                     src={`/assets/tools/${tool.img}`}
-                    alt={tool.name}
-                    className="w-full h-full object-contain"
+                    alt=""
+                    width="32"
+                    height="32"
+                    className="size-8 object-contain"
                   />
                 </div>
-
-                {/* Info Tool */}
                 <div>
-                  <h4 className="font-bold text-white text-sm md:text-base">
-                    {tool.name}
-                  </h4>
-                  <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">
-                    {tool.desc}
-                  </p>
+                  <p className="font-bold leading-tight">{tool.name}</p>
+                  <p className="mt-1 font-mono text-xs text-[#42565c]">{tool.desc}</p>
                 </div>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
         {/* TOOLS END */}
 
-        {/* PROJEK */}
-        <section id="proyek" className="py-24 scroll-mt-0">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black mb-4 uppercase tracking-tight">
-              Projects
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-              Here are some of the projects I have worked on.
-            </p>
+        <Projects />
+
+        <section id="kontak" className="contact-postcard" aria-labelledby="contact-title">
+          <div className="postcard-front">
+            <img className="postcard-stamp" src="/assets/projects/sultan-miami-poster.webp" alt="" width="1122" height="1402" loading="lazy" />
+            <h2 id="contact-title">Contact</h2>
           </div>
-
-          {/* Grid Projects */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                title: "CHATBOT AI LEARNING BUDDY",
-                desc: "An AI chatbot developed during the ASAH by Dicoding program to support users learning on the Dicoding platform.",
-                tags: [
-                  "HTML",
-                  "CSS",
-                  "Javascript",
-                  "React",
-                  "NodeJS",
-                  "expressJS",
-                ],
-                img: "chabtotai.png",
-                link: "https://learning-buddy-tau.vercel.app/",
-              },
-              {
-                title: "Mantra Perfume E-Commerce",
-                desc: "An e-commerce website for the Mantra perfume brand, supporting online sales and business management for administrators.",
-                tags: ["Next JS", "Tailwind CSS", "Javascript", "Express JS"],
-                img: "web-1.png",
-                link: "https://mantrascent.vercel.app/",
-              },
-              {
-                title: "Company Profile",
-                desc: "A landing page showcasing a company profile.",
-                tags: ["Laravel", "PHP", "JavaScript", "HTML", "CSS"],
-                img: "piel.png",
-                link: "#",
-              },
-            ].map((project, index) => (
-              <div
-                key={index}
-                className="bg-[#222] rounded-2xl overflow-hidden border border-white/5 group hover:border-purple-500/50 transition-all duration-300 shadow-xl flex flex-col justify-between"
-              >
-                <div>
-                  {/* Project Image */}
-                  <div className="relative h-56 overflow-hidden">
-                    <img
-                      src={`/assets/projects/${project.img}`}
-                      alt={project.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#222] to-transparent opacity-60"></div>
-                  </div>
-
-                  {/* Project Content */}
-                  <div className="p-6">
-                    <h3 className="text-2xl font-bold mb-3 text-white">
-                      {project.title}
-                    </h3>
-                    <p className="text-gray-400 text-sm mb-6 leading-relaxed">
-                      {project.desc}
-                    </p>
-
-                    {/* Tech Badges */}
-                    <div className="flex flex-wrap gap-2 mb-8">
-                      {project.tags.map((tag, i) => (
-                        <span
-                          key={i}
-                          className="px-3 py-1 bg-white/5 border border-white/10 rounded-md text-xs font-medium text-gray-300"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Button CTA */}
-                <div className="p-6 pt-0">
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full py-3 bg-[#7c3aed] hover:bg-[#6d28d9] text-white text-center rounded-xl font-bold transition-colors shadow-lg shadow-purple-500/20"
-                  >
-                    View Website
-                  </a>
-                </div>
-              </div>
-            ))}
+          <div className="postcard-address">
+            <a className="mail-link" href="mailto:sultanmaulana.fa@gmail.com">
+              <span className="postcard-label">Send an email</span>
+              <strong>sultanmaulana.fa<wbr />@gmail.com</strong>
+            </a>
+            <a className="profile-link" href="https://www.linkedin.com/in/sultan-maulana-a40809252/" target="_blank" rel="noopener noreferrer">
+              <span>LinkedIn</span><span>Sultan Maulana</span><span aria-hidden="true">↗</span>
+            </a>
+            <a className="profile-link" href="https://www.instagram.com/sltnnnnn_/" target="_blank" rel="noopener noreferrer">
+              <span>Instagram</span><span>@sltnnnnn_</span><span aria-hidden="true">↗</span>
+            </a>
           </div>
         </section>
-        {/* PROJEK END */}
-
-        {/* KONTAK */}
-        <section
-          id="kontak"
-          className="py-24 scroll-mt-24 border-t border-white/5"
-        >
-          <div className="text-center max-w-2xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-black mb-6 uppercase tracking-tight">
-              Contact
-            </h2>
-            <p className="text-gray-400 mb-12 text-lg">
-              Interested in collaborating or have a question? Get in touch
-              through my social media channels below!
-            </p>
-
-            <div className="flex justify-center items-center gap-8">
-              {/* Instagram */}
-              <a
-                href="https://www.instagram.com/sltnnnnn_/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex flex-col items-center gap-3 transition-all hover:-translate-y-2"
-              >
-                <div className="w-16 h-16 p-4 bg-[#222] border border-white/5 rounded-2xl group-hover:border-pink-500/50 group-hover:bg-pink-500/10 transition-all shadow-xl">
-                  <img
-                    src="/assets/icon/instagram.png"
-                    alt="Instagram"
-                    className="w-full h-full object-contain grayscale group-hover:grayscale-0 transition-all"
-                    onError={(e) => {
-                      e.currentTarget.src =
-                        "https://cdn-icons-png.flaticon.com/512/2111/2111463.png";
-                    }}
-                  />
-                </div>
-                <span className="text-xs font-bold text-gray-500 group-hover:text-white uppercase tracking-widest">
-                  Instagram
-                </span>
-              </a>
-
-              {/* WhatsApp */}
-              <a
-                href="https://wa.me/628xxxxxxxxxx"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex flex-col items-center gap-3 transition-all hover:-translate-y-2"
-              >
-                <div className="w-16 h-16 p-4 bg-[#222] border border-white/5 rounded-2xl group-hover:border-green-500/50 group-hover:bg-green-500/10 transition-all shadow-xl">
-                  <img
-                    src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
-                    alt="WhatsApp"
-                    className="w-full h-full object-contain grayscale group-hover:grayscale-0 transition-all"
-                  />
-                </div>
-                <span className="text-xs font-bold text-gray-500 group-hover:text-white uppercase tracking-widest">
-                  WhatsApp
-                </span>
-              </a>
-
-              {/* LinkedIn */}
-              <a
-                href="https://www.linkedin.com/in/sultan-maulana-a40809252/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex flex-col items-center gap-3 transition-all hover:-translate-y-2"
-              >
-                <div className="w-16 h-16 p-4 bg-[#222] border border-white/5 rounded-2xl group-hover:border-blue-500/50 group-hover:bg-blue-500/10 transition-all shadow-xl">
-                  <img
-                    src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
-                    alt="LinkedIn"
-                    className="w-full h-full object-contain grayscale group-hover:grayscale-0 transition-all"
-                  />
-                </div>
-                <span className="text-xs font-bold text-gray-500 group-hover:text-white uppercase tracking-widest">
-                  LinkedIn
-                </span>
-              </a>
-            </div>
-
-            {/* Email Link */}
-            <div className="mt-16">
-              <p className="text-gray-500 text-sm mb-2 uppercase tracking-widest">
-                Or email me at:
-              </p>
-              <a
-                href="mailto:sultanmaulana.fa@gmail.com"
-                className="text-xl md:text-2xl font-bold hover:text-blue-500 transition-colors"
-              >
-                sultanmaulana.fa@gmail.com
-              </a>
-            </div>
-          </div>
-        </section>
-        {/* KONTAK END */}
       </main>
     </div>
   );
